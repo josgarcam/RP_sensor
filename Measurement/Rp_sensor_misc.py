@@ -118,10 +118,11 @@ def db_update():
             cursorObj.execute("SELECT * from dht11 ORDER BY id_measurement")
             rows = cursorObj.fetchall()
 
+            flag_uncess = False
             if rows:
                 print('\033[92m' + f'[{str(datetime.now())[:19]}] - Transmitiendo datos en local' + '\033[0m')
                 for row in rows:
-                    sleep(0.5)
+                    sleep(0.75)
                     data = {"measured_date": row[1],
                             "id_rp": row[2],
                             "id_sensor": row[3],
@@ -137,14 +138,16 @@ def db_update():
                         print(f'[{str(datetime.now())[:19]}] - Lectura recuperada: ', data)
 
                     elif response == UNSUCCESSFUL_POST:
+                        flag_uncess = True
                         cursorObj.close()
                         print(
                             '\033[93m' + f'[{str(datetime.now())[:19]}] - Transmisión incompleta de los datos en local' + '\033[0m')
-                        return
+                        break
 
                     signal.pthread_sigmask(signal.SIG_UNBLOCK, [signal.SIGINT])
 
-                print('\033[92m' + f'[{str(datetime.now())[:19]}] - Transmisión completa de los datos en local con éxito' + '\033[0m')
+                if not flag_uncess:
+                    print('\033[92m' + f'[{str(datetime.now())[:19]}] - Transmisión completa de los datos en local con éxito' + '\033[0m')
 
             cursorObj.close()
             
