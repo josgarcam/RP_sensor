@@ -1,4 +1,4 @@
-#Monitorización de la temperatura y humedad con RP
+# Monitorización de la temperatura y humedad con RP
 
 ## Configuración
 * Clonar el repositorio en `home/pi/`. El resultado sería: `/home/pi/RP_sensor`.
