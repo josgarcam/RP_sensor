@@ -6,31 +6,54 @@ from datetime import datetime
 def record(request):
     try:
         session = db.Session()
-        db.Base.metadata.create_all(db.engine)
-        ob = DHT11(save_date=datetime.now(),
-                   measured_date=request.form.get("measured_date"),
-                   id_rp=request.form.get("id_rp"),
-                   id_sensor=request.form.get("id_sensor"),
-                   temperature=request.form.get("temperature"),
-                   humidity=request.form.get("humidity"))
         
-        
-        session.add(ob)
-        session.commit()
-        
-        return str(ob.measured_date), 200
-        
-        
-    except:
         try:
+            db.Base.metadata.create_all(db.engine)
+            ob = DHT11(save_date=datetime.now(),
+                       measured_date=request.form.get("measured_date"),
+                       id_rp=request.form.get("id_rp"),
+                       id_sensor=request.form.get("id_sensor"),
+                       temperature=request.form.get("temperature"),
+                       humidity=request.form.get("humidity"))
+        
+            session.add(ob)
+            session.commit()
             session.close()
+            return str(request.form.get("measured_date")), 200
+        
         except:
-            pass
-        finally:
+            session.rollback()
+            session.close()
             return 'Error', 500
+       
+    except:
+        session.close()
+        return 'Error', 500
     
-    
-
+#     try:
+#         
+#         db.Base.metadata.create_all(db.engine)
+#         ob = DHT11(save_date=datetime.now(),
+#                    measured_date=request.form.get("measured_date"),
+#                    id_rp=request.form.get("id_rp"),
+#                    id_sensor=request.form.get("id_sensor"),
+#                    temperature=request.form.get("temperature"),
+#                    humidity=request.form.get("humidity"))
+#         
+#         
+#         session.add(ob)
+#         session.commit()
+#         
+#         return str(ob.measured_date), 200
+#         
+#         
+#     except:
+#         try:
+#             session.close()
+#         except:
+#             pass
+#         finally:
+#             raise()
 
 
 def read(id_rp, id_sensor):

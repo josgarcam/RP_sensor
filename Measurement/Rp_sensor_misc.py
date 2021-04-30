@@ -121,6 +121,7 @@ def db_update():
             if rows:
                 print('\033[92m' + f'[{str(datetime.now())[:19]}] - Transmitiendo datos en local' + '\033[0m')
                 for row in rows:
+                    sleep(0.5)
                     data = {"measured_date": row[1],
                             "id_rp": row[2],
                             "id_sensor": row[3],
